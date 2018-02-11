@@ -8,7 +8,7 @@ Details:
     * plot the data
         * load csv data using method csv.reader()
             * set argument "quoting" to csv.QUOTE_NONNUMERIC/QUOTE_NONE so that data is loaded as floats
-        * put data in np.array, instead of list
+        * put data in ndarray, instead of list
         * use pandas/matplotlib to plot the data
             * create pd.DataFrame objects
             * use plot.scatter() method to draw a scatter diagram (accept a pd.DataFrame object as a argument)
