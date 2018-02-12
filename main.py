@@ -28,8 +28,13 @@ def cost_function(theta, X, y):
     sigmoid = lambda x: 1 / (1 + np.exp(-x))
     hx = sigmoid(np.dot(X, theta))
     cost = -y*np.log(hx) - (1-y)*np.log(1-hx)
-    J = sum(cost)/len(y)
-    return J
+    return sum(cost)/len(y)
+
+
+def gradient(theta, X, y):
+    sigmoid = lambda x: 1 / (1 + np.exp(-x))
+    hx = sigmoid(np.dot(X, theta))
+    return np.dot(X.transpose(), (hx - y)) / m
 
 if __name__ == '__main__':
     # load data
@@ -43,11 +48,11 @@ if __name__ == '__main__':
     X_1 = np.column_stack(((np.ones((m, 1)), X_1)))
     theta0 = np.asanyarray([0]*(n+1))
 
-    print('use Nelder-Mead method to minimize cost function')
-    minimize(lambda t: cost_function(t, X_1, y_1), theta0,
-             method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    J = lambda t: cost_function(t, X_1, y_1)
+    grad = lambda t: gradient(t, X_1, y_1)
 
-    '''
-    minimize(lambda t: cost_function(t, X_1, y_1), theta0,
-             method='BFGS', options={'disp': True})
-    '''
+    print('Apply "Nelder-Mead" method to minimize cost function')
+    minimize(J, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+
+    print('Apply "BFGS" method to minimize cost function')
+    minimize(J, theta0, jac=grad, method='BFGS', options={'disp': True})

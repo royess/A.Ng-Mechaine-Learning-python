@@ -13,5 +13,5 @@ Details:
             * Create pd.DataFrame objects.
             * Use plot.scatter() method to draw a scatter diagram (accept a pd.DataFrame object as a argument).
             * NOTE: pandas can integrate lines of matplotlib commands into a one method.
-    * Use Nelder-Mead method to minimize cost function.
+    * Use "Nelder-Mead" and "BFGS" methods to minimize cost function.
     Finally we get the same result as OCTAVE version gave.
