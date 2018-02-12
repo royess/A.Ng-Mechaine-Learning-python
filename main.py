@@ -48,11 +48,13 @@ if __name__ == '__main__':
     X_1 = np.column_stack(((np.ones((m, 1)), X_1)))
     theta0 = np.asanyarray([0]*(n+1))
 
-    J = lambda t: cost_function(t, X_1, y_1)
-    grad = lambda t: gradient(t, X_1, y_1)
+    def J(t): return cost_function(t, X_1, y_1)
+
+    def grad(t): return gradient(t, X_1, y_1)
 
     print('Apply "Nelder-Mead" method to minimize cost function')
     minimize(J, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    print('/n')
 
     print('Apply "BFGS" method to minimize cost function')
     minimize(J, theta0, jac=grad, method='BFGS', options={'disp': True})
