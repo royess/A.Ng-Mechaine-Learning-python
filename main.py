@@ -24,17 +24,35 @@ def plot_data(X, y):
     plt.show()
 
 
+def sigmoid(x): return 1 / (1 + np.exp(-x))
+
+
 def cost_function(theta, X, y):
-    sigmoid = lambda x: 1 / (1 + np.exp(-x))
     hx = sigmoid(np.dot(X, theta))
     cost = -y*np.log(hx) - (1-y)*np.log(1-hx)
-    return sum(cost)/len(y)
+    return sum(cost) / len(y)
 
 
 def gradient(theta, X, y):
-    sigmoid = lambda x: 1 / (1 + np.exp(-x))
     hx = sigmoid(np.dot(X, theta))
     return np.dot(X.transpose(), (hx - y)) / m
+
+
+# construct a linear cost function
+def cost_function2(theta, X, y):
+    hx = sigmoid(np.dot(X, theta))
+    cost = y*(1-hx) + (1-y)*hx
+    cost *= -np.log(1/2)/(1/2)
+    return sum(cost) / len(y)
+
+
+# construct a square cost function
+def cost_function3(theta, X, y):
+    hx = sigmoid(np.dot(X, theta))
+    cost = y*(1-hx)**2 + (1-y)*hx**2
+    cost *= -np.log(1/2) / (1/4)
+    return sum(cost) / len(y)
+
 
 if __name__ == '__main__':
     # load data
@@ -53,8 +71,23 @@ if __name__ == '__main__':
     def grad(t): return gradient(t, X_1, y_1)
 
     print('Apply "Nelder-Mead" method to minimize cost function')
-    minimize(J, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    res1 = minimize(J, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    print(res1.x)
     print('/n')
 
     print('Apply "BFGS" method to minimize cost function')
     minimize(J, theta0, jac=grad, method='BFGS', options={'disp': True})
+
+    print('Now we use a linear cost function')
+
+    def J2(t): return cost_function2(t, X_1, y_1)
+    res2 = minimize(J2, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    print(res2.x, '\nWe find it doesn\'t work well...')
+
+    print('Again, we try a square cost function')
+
+    def J3(t): return cost_function3(t, X_1, y_1)
+    res3 = minimize(J3, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    print(res3.x, '\nWoo, seem better!')
+
+
