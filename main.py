@@ -66,28 +66,26 @@ if __name__ == '__main__':
     X_1 = np.column_stack(((np.ones((m, 1)), X_1)))
     theta0 = np.asanyarray([0]*(n+1))
 
-    def J(t): return cost_function(t, X_1, y_1)
 
-    def grad(t): return gradient(t, X_1, y_1)
 
     print('Apply "Nelder-Mead" method to minimize cost function')
-    res1 = minimize(J, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
-    print(res1.x)
-    print('/n')
+    res1 = minimize(lambda t: cost_function(t, X_1, y_1), theta0,
+                    method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    print(res1.x, '/n')
 
     print('Apply "BFGS" method to minimize cost function')
-    minimize(J, theta0, jac=grad, method='BFGS', options={'disp': True})
+    minimize(lambda t: cost_function(t, X_1, y_1), theta0,
+             jac=lambda t: gradient(t, X_1, y_1), method='BFGS', options={'disp': True})
 
     print('Now we use a linear cost function')
 
-    def J2(t): return cost_function2(t, X_1, y_1)
-    res2 = minimize(J2, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
-    print(res2.x, '\nWe find it doesn\'t work well...')
+    res2 = minimize(lambda t: cost_function2(t, X_1, y_1), theta0, method='Nelder-Mead',
+                    options={'xtol': 1e-8, 'disp': True})
+    print(res2.x, '\n', 'We find it doesn\'t work well...')
 
     print('Again, we try a square cost function')
-
-    def J3(t): return cost_function3(t, X_1, y_1)
-    res3 = minimize(J3, theta0, method='Nelder-Mead', options={'xtol': 1e-8, 'disp': True})
+    res3 = minimize(lambda t: cost_function3(t, X_1, y_1), theta0, method='Nelder-Mead',
+                    options={'xtol': 1e-8, 'disp': True})
     print(res3.x, '\nWoo, seem better!')
 
 
